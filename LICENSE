@@ -1,16 +1,30 @@
-MIT License
+﻿Custom Restricted License 2026
 
 Copyright (c) 2026
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is granted to use, copy, modify, and distribute this software and its
+source code, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. This software and any modified or derived version may not be sold, sublicensed
+   for sale, or included in any paid product or paid service.
+
+2. Commercial resale of this software, whether in original or modified form, is
+   strictly prohibited.
+
+3. This copyright notice and license text must be included in all copies or
+   substantial portions of the software.
+
+4. If this software is used to develop a mod or any derived project, the project
+   must clearly state where lyric retrieval comes from.
+
+5. Any repository or distributed source package using this software or derived
+   code must include a LICENSE file.
+
+6. This license may be changed at any time for future versions or future
+   distributions of this repository.
+
+7. Forked repositories or copies created before a license change are not
+   retroactively bound to newer license terms unless they explicitly adopt them.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
