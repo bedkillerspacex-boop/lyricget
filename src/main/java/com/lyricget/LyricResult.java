@@ -1,4 +1,4 @@
-package com.southside.lyricget;
+package com.lyricget;
 
 public record LyricResult(String lyrics, String providerName) {
     public LyricResult {

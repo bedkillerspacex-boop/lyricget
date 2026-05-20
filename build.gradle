@@ -3,7 +3,7 @@ plugins {
     id 'application'
 }
 
-group = 'com.southside'
+group = 'com.lyricget'
 version = '1.0.0'
 
 repositories {
@@ -15,7 +15,7 @@ dependencies {
 }
 
 application {
-    mainClass = 'com.southside.lyricget.LyricGetMain'
+    mainClass = 'com.lyricget.LyricGetMain'
 }
 
 java {

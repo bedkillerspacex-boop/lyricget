@@ -1,4 +1,4 @@
-package com.southside.lyricget;
+package com.lyricget;
 
 public final class LyricSearchConfig {
     public boolean enableNetease = true;

@@ -1,7 +1,7 @@
-package com.southside.lyricget.lyrics;
+package com.lyricget.lyrics;
 
 import com.google.gson.JsonObject;
-import com.southside.lyricget.LyricSearchConfig;
+import com.lyricget.LyricSearchConfig;
 
 public class MusixmatchProvider extends AbstractLyricProvider {
     @Override
@@ -13,11 +13,11 @@ public class MusixmatchProvider extends AbstractLyricProvider {
     protected String fetchSync(String title, String artist, LyricSearchConfig config) {
         if (config.musixmatchApiKey == null || config.musixmatchApiKey.isBlank()) return null;
         String url = "https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?q_track="
-                + com.southside.lyricget.LyricsFetcher.encode(title)
+                + com.lyricget.LyricsFetcher.encode(title)
                 + "&q_artist="
-                + com.southside.lyricget.LyricsFetcher.encode(artist)
+                + com.lyricget.LyricsFetcher.encode(artist)
                 + "&apikey="
-                + com.southside.lyricget.LyricsFetcher.encode(config.musixmatchApiKey);
+                + com.lyricget.LyricsFetcher.encode(config.musixmatchApiKey);
         JsonObject json = getJson(url, config.timeoutMs);
         if (json == null) return null;
         if (!json.has("message") || !json.get("message").isJsonObject()) return null;

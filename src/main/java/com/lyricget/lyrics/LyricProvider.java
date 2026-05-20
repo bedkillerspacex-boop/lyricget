@@ -1,6 +1,6 @@
-package com.southside.lyricget.lyrics;
+package com.lyricget.lyrics;
 
-import com.southside.lyricget.LyricSearchConfig;
+import com.lyricget.LyricSearchConfig;
 
 import java.util.concurrent.CompletableFuture;
 

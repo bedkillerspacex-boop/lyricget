@@ -1,4 +1,4 @@
-package com.southside.lyricget.lyrics;
+package com.lyricget.lyrics;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -46,9 +46,9 @@ public abstract class AbstractLyricProvider implements LyricProvider {
     }
 
     @Override
-    public CompletableFuture<String> fetch(String title, String artist, com.southside.lyricget.LyricSearchConfig config) {
+    public CompletableFuture<String> fetch(String title, String artist, com.lyricget.LyricSearchConfig config) {
         return CompletableFuture.supplyAsync(() -> fetchSync(title, artist, config));
     }
 
-    protected abstract String fetchSync(String title, String artist, com.southside.lyricget.LyricSearchConfig config);
+    protected abstract String fetchSync(String title, String artist, com.lyricget.LyricSearchConfig config);
 }

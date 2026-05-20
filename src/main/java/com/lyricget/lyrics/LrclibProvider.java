@@ -1,8 +1,8 @@
-package com.southside.lyricget.lyrics;
+package com.lyricget.lyrics;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.southside.lyricget.LyricSearchConfig;
+import com.lyricget.LyricSearchConfig;
 
 public class LrclibProvider extends AbstractLyricProvider {
     @Override
@@ -12,8 +12,8 @@ public class LrclibProvider extends AbstractLyricProvider {
 
     @Override
     protected String fetchSync(String title, String artist, LyricSearchConfig config) {
-        String url = "https://lrclib.net/api/get?track_name=" + com.southside.lyricget.LyricsFetcher.encode(title)
-                + "&artist_name=" + com.southside.lyricget.LyricsFetcher.encode(artist);
+        String url = "https://lrclib.net/api/get?track_name=" + com.lyricget.LyricsFetcher.encode(title)
+                + "&artist_name=" + com.lyricget.LyricsFetcher.encode(artist);
         JsonObject json = getJson(url, config.timeoutMs);
         if (json == null) return null;
         if (json.has("syncedLyrics") && !json.get("syncedLyrics").isJsonNull()) return json.get("syncedLyrics").getAsString();

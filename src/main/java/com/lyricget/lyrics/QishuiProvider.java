@@ -1,7 +1,7 @@
-package com.southside.lyricget.lyrics;
+package com.lyricget.lyrics;
 
 import com.google.gson.JsonObject;
-import com.southside.lyricget.LyricSearchConfig;
+import com.lyricget.LyricSearchConfig;
 
 public class QishuiProvider extends AbstractLyricProvider {
     @Override
@@ -12,9 +12,9 @@ public class QishuiProvider extends AbstractLyricProvider {
     @Override
     protected String fetchSync(String title, String artist, LyricSearchConfig config) {
         String url = "https://api.vience.cn/api/music/qishui/lrc?name="
-                + com.southside.lyricget.LyricsFetcher.encode(title)
+                + com.lyricget.LyricsFetcher.encode(title)
                 + "&artist="
-                + com.southside.lyricget.LyricsFetcher.encode(artist);
+                + com.lyricget.LyricsFetcher.encode(artist);
         JsonObject json = getJson(url, config.timeoutMs);
         if (json == null) return null;
         if (json.has("data") && json.get("data").isJsonObject()) {

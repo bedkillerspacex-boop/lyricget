@@ -1,8 +1,8 @@
-package com.southside.lyricget.lyrics;
+package com.lyricget.lyrics;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.southside.lyricget.LyricSearchConfig;
+import com.lyricget.LyricSearchConfig;
 
 public class KugouProvider extends AbstractLyricProvider {
     @Override
@@ -13,7 +13,7 @@ public class KugouProvider extends AbstractLyricProvider {
     @Override
     protected String fetchSync(String title, String artist, LyricSearchConfig config) {
         String keyword = title + " " + artist;
-        String searchUrl = "https://lyrics.kugou.com/search?ver=1&man=yes&client=pc&keyword=" + com.southside.lyricget.LyricsFetcher.encode(keyword);
+        String searchUrl = "https://lyrics.kugou.com/search?ver=1&man=yes&client=pc&keyword=" + com.lyricget.LyricsFetcher.encode(keyword);
         JsonObject search = getJson(searchUrl, config.timeoutMs);
         if (search == null || !search.has("candidates") || !search.get("candidates").isJsonArray()) return null;
         JsonArray candidates = search.getAsJsonArray("candidates");

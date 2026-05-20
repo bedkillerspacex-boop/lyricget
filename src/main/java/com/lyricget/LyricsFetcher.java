@@ -1,6 +1,6 @@
-package com.southside.lyricget;
+package com.lyricget;
 
-import com.southside.lyricget.lyrics.*;
+import com.lyricget.lyrics.*;
 
 import java.util.ArrayList;
 import java.util.List;

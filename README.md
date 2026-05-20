@@ -1,4 +1,4 @@
-﻿# lyricget
+# lyricget
 
 `lyricget` 是一个单一功能的小项目：
 
@@ -54,7 +54,7 @@
 ## 项目结构
 
 ```text
-src/main/java/com/southside/lyricget/
+src/main/java/com/lyricget/
   LyricGetMain.java
   LyricsFetcher.java
   LyricResult.java

@@ -1,7 +1,7 @@
-package com.southside.lyricget.lyrics;
+package com.lyricget.lyrics;
 
 import com.google.gson.JsonObject;
-import com.southside.lyricget.LyricSearchConfig;
+import com.lyricget.LyricSearchConfig;
 
 public class QqProvider extends AbstractLyricProvider {
     @Override
@@ -12,7 +12,7 @@ public class QqProvider extends AbstractLyricProvider {
     @Override
     protected String fetchSync(String title, String artist, LyricSearchConfig config) {
         String keyword = title + " " + artist;
-        String searchUrl = "https://c.y.qq.com/soso/fcgi-bin/client_search_cp?p=1&n=10&w=" + com.southside.lyricget.LyricsFetcher.encode(keyword) + "&format=json";
+        String searchUrl = "https://c.y.qq.com/soso/fcgi-bin/client_search_cp?p=1&n=10&w=" + com.lyricget.LyricsFetcher.encode(keyword) + "&format=json";
         JsonObject search = getJson(searchUrl, config.timeoutMs);
         if (search == null) return null;
         JsonObject data = search.has("data") && search.get("data").isJsonObject() ? search.getAsJsonObject("data") : null;
