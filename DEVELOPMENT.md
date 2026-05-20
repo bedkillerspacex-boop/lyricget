@@ -306,7 +306,7 @@ normalizedTitle + "\n" + normalizedArtist
 
 集成到 mod 或派生项目时必须遵守 `LICENSE`，尤其是：
 
-- 不允许二次售卖，
+- 不允许售卖、转售或以再授权出售本项目及其修改版、派生版
 - 分发源码或派生代码时必须包含 LICENSE 文件
 - 使用此项目开发 mod 时，必须明确说明歌词获取来源
 
