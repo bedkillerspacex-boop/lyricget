@@ -1,41 +1,41 @@
-# Mod 闆嗘垚鏂囨。
+# Mod 集成文档
 
-`lyricget` 涓嶆槸涓€涓?Minecraft mod锛屼篃涓嶅鐞?SMTC銆丠UD銆佹挱鏀惧櫒鐘舵€佹垨 UI銆?
+`lyricget` 不是一个 Minecraft mod，也不处理 SMTC、HUD、播放器状态或 UI。
 
-瀹冩槸缁欏叾浠?mod 闆嗘垚浣跨敤鐨勬瓕璇嶈幏鍙栨ā鍧楋細涓婂眰 mod 鎻愪緵姝屽悕鍜屾瓕鎵嬪悕锛宍lyricget` 骞惰璇锋眰澶氫釜姝岃瘝婧愶紝鐒跺悗杩斿洖绗竴涓彲鐢ㄦ瓕璇嶇粨鏋溿€?
+它是给其他 mod 集成使用的歌词获取模块：上层 mod 提供歌名和歌手名，`lyricget` 并行请求多个歌词源，然后返回第一个可用歌词结果。
 
-## 闆嗘垚杈圭晫
+## 集成边界
 
-闆嗘垚鏂硅礋璐ｏ細
+集成方负责：
 
-- 鐩戝惉鎴栬鍙栧綋鍓嶆挱鏀炬瓕鏇?
-- 鍐冲畾浠€涔堟椂鍊欏彂璧锋瓕璇嶆悳绱?
-- 缂撳瓨鎼滅储缁撴灉
-- 鍦?HUD銆佽亰澶╂爮銆佸睆骞曠粍浠舵垨鍏朵粬 UI 涓樉绀烘瓕璇?
-- 澶勭悊 Minecraft 瀹㈡埛绔嚎绋嬪拰娓叉煋绾跨▼
+- 监听或读取当前播放歌曲
+- 决定什么时候发起歌词搜索
+- 缓存搜索结果
+- 在 HUD、聊天栏、屏幕组件或其他 UI 中显示歌词
+- 处理 Minecraft 客户端线程和渲染线程
 
-`lyricget` 璐熻矗锛?
+`lyricget` 负责：
 
-- 鎺ユ敹 `title` 鍜屽彲閫?`artist`
-- 璋冪敤宸插惎鐢ㄧ殑姝岃瘝婧?
-- 杩斿洖 `LyricResult`
-- 鍦ㄦ病鏈夊彲鐢ㄦ瓕璇嶆椂杩斿洖 `null`
+- 接收 `title` 和可选 `artist`
+- 调用已启用的歌词源
+- 返回 `LyricResult`
+- 在没有可用歌词时返回 `null`
 
-## 寮曞叆鏂瑰紡
+## 引入方式
 
-褰撳墠椤圭洰鏄櫘閫?Gradle Java 椤圭洰锛屽皻鏈彂甯冨埌 Maven 浠撳簱銆傚叾浠?mod 椤圭洰鍙互鐢ㄤ笅闈㈠嚑绉嶆柟寮忔帴鍏ャ€?
+当前项目是普通 Gradle Java 项目，尚未发布到 Maven 仓库。其他 mod 项目可以用下面几种方式接入。
 
-### 鏂瑰紡涓€锛氫綔涓烘簮鐮佹ā鍧楀紩鍏?
+### 方式一：作为源码模块引入
 
-閫傚悎鍚屼竴涓粨搴撴垨鏈湴寮€鍙戙€?
+适合同一个仓库或本地开发。
 
-鍦ㄤ笂灞?mod 鐨?`settings.gradle` 涓姞鍏ワ細
+在上层 mod 的 `settings.gradle` 中加入：
 
 ```gradle
 includeBuild("../lyricget")
 ```
 
-鐒跺悗鍦ㄤ笂灞?mod 鐨?`build.gradle` 涓緷璧栵細
+然后在上层 mod 的 `build.gradle` 中依赖：
 
 ```gradle
 dependencies {
@@ -43,19 +43,19 @@ dependencies {
 }
 ```
 
-璺緞鎸夊疄闄呯洰褰曡皟鏁淬€?
+路径按实际目录调整。
 
-### 鏂瑰紡浜岋細澶嶅埗婧愮爜鍖?
+### 方式二：复制源码包
 
-閫傚悎涓嶆兂缁存姢澶氭ā鍧楁瀯寤虹殑灏忓瀷 mod銆?
+适合不想维护多模块构建的小型 mod。
 
-澶嶅埗浠ヤ笅鍖呭埌涓婂眰 mod 鐨勬簮鐮佺洰褰曪細
+复制以下包到上层 mod 的源码目录：
 
 ```text
 com/lyricget/
 ```
 
-鍚屾椂纭繚涓婂眰 mod 涔熷寘鍚?Gson 渚濊禆锛?
+同时确保上层 mod 也包含 Gson 依赖：
 
 ```gradle
 dependencies {
@@ -63,27 +63,27 @@ dependencies {
 }
 ```
 
-濡傛灉浣跨敤 Shadow銆丣ar-in-Jar 鎴?loader 鑷甫鐨勪緷璧栨墦鍖呮柟寮忥紝鎸夌洰鏍?mod loader 鐨勮鍒欏鐞嗕緷璧栥€?
+如果使用 Shadow、Jar-in-Jar 或 loader 自带的依赖打包方式，按目标 mod loader 的规则处理依赖。
 
-## Skid 鍒板叾浠?mod 鍚庡浣曢€氫俊
+## Skid 到其他 mod 后如何通信
 
-濡傛灉鎶?`lyricget` 婧愮爜澶嶅埗杩涘叾浠?mod锛屾湰椤圭洰灏变笉鍐嶆槸涓€涓嫭绔?mod銆傛鏃朵笉瑕佽璁♀€滀袱涓?mod 浜掑彂娑堟伅鈥濓紝鑰屾槸鎶婂畠褰撴垚涓婂眰 mod 鍐呴儴鐨勪竴涓?Java 鏈嶅姟銆?
+如果把 `lyricget` 源码复制进其他 mod，本项目就不再是一个独立 mod。此时不要设计“两个 mod 互发消息”，而是把它当成上层 mod 内部的一个 Java 服务。
 
-鎺ㄨ崘杈圭晫锛?
+推荐边界：
 
 ```text
-鎾斁鐘舵€佹ā鍧?-> 姝岃瘝鏈嶅姟閫傞厤灞?-> lyricget -> 姝岃瘝鏈嶅姟閫傞厤灞?-> UI/缂撳瓨妯″潡
+播放状态模块 -> 歌词服务适配层 -> lyricget -> 歌词服务适配层 -> UI/缓存模块
 ```
 
-涔熷氨鏄細
+也就是：
 
-- 涓婂眰 mod 璐熻矗鎷垮埌褰撳墠鎾斁淇℃伅
-- 涓婂眰 mod 璋冪敤 `LyricsFetcher.searchParallelDetailed(...)`
-- `lyricget` 杩斿洖 `CompletableFuture<LyricResult>`
-- 涓婂眰 mod 鍦ㄥ洖璋冮噷鎺ユ敹缁撴灉
-- 涓婂眰 mod 鍐嶆妸缁撴灉浜ょ粰鑷繁鐨勭紦瀛樸€丠UD銆佽亰澶╂爮鎴栧叾浠?UI
+- 上层 mod 负责拿到当前播放信息
+- 上层 mod 调用 `LyricsFetcher.searchParallelDetailed(...)`
+- `lyricget` 返回 `CompletableFuture<LyricResult>`
+- 上层 mod 在回调里接收结果
+- 上层 mod 再把结果交给自己的缓存、HUD、聊天栏或其他 UI
 
-绀轰緥閫傞厤灞傦細
+示例适配层：
 
 ```java
 import com.lyricget.LyricResult;
@@ -119,7 +119,7 @@ public final class LyricGetBridge {
 }
 ```
 
-涓婂眰 mod 鑷繁瀹氫箟娑堟伅瀵硅薄锛?
+上层 mod 自己定义消息对象：
 
 ```java
 public record LyricMessage(
@@ -139,42 +139,42 @@ public record LyricMessage(
 }
 ```
 
-璋冪敤鏂瑰紡锛?
+调用方式：
 
 ```java
 LyricGetBridge bridge = new LyricGetBridge();
 
 bridge.requestLyrics(currentTitle, currentArtist, message -> {
     if (!message.found()) {
-        // 鍐欏叆鏈懡涓紦瀛橈紝鎴栨竻绌哄綋鍓嶆瓕璇嶆樉绀恒€?
+        // 写入未命中缓存，或清空当前歌词显示。
         return;
     }
 
-    // 鍐欏叆浣犵殑 mod 缂撳瓨鎴栫姸鎬佸鍣ㄣ€?
-    // 濡傛灉瑕佹洿鏂?Minecraft UI锛岃鍒囧洖瀹㈡埛绔嚎绋嬪悗鍐嶆敼 UI 鐘舵€併€?
+    // 写入你的 mod 缓存或状态容器。
+    // 如果要更新 Minecraft UI，请切回客户端线程后再改 UI 状态。
     String lyrics = message.lyrics();
     String provider = message.provider();
 });
 ```
 
-杩欏氨鏄€滃彂閫佲€濆拰鈥滄帴鏀垛€濓細
+这就是“发送”和“接收”：
 
-- 鍙戦€侊細涓婂眰 mod 璋冪敤 `requestLyrics(title, artist, receiver)`
-- 鎺ユ敹锛歚receiver.accept(message)` 鏀跺埌姝岃瘝缁撴灉
+- 发送：上层 mod 调用 `requestLyrics(title, artist, receiver)`
+- 接收：`receiver.accept(message)` 收到歌词结果
 
-杩欓噷鐨勬秷鎭槸杩涚▼鍐?Java 瀵硅薄锛屼笉鏄?Minecraft 缃戠粶鍖咃紝涔熶笉鏄?mod channel銆?
+这里的消息是进程内 Java 对象，不是 Minecraft 网络包，也不是 mod channel。
 
-鍙湁鍦ㄤ綘鎶?`lyricget` 鏀归€犳垚鐙珛 mod锛屽苟涓斿笇鏈涘叾浠?mod 鍦ㄨ繍琛屾椂閫氳繃 mod loader 璋冪敤瀹冩椂锛屾墠闇€瑕侀澶栬璁?Fabric API銆丗orge capability銆佷簨浠舵€荤嚎鎴栫綉缁?channel銆傚綋鍓嶉」鐩笉鎻愪緵杩欎簺灞傘€?
+只有在你把 `lyricget` 改造成独立 mod，并且希望其他 mod 在运行时通过 mod loader 调用它时，才需要额外设计 Fabric API、Forge capability、事件总线或网络 channel。当前项目不提供这些层。
 
-## 璋冪敤鍏ュ彛
+## 调用入口
 
-涓诲叆鍙ｆ槸锛?
+主入口是：
 
 ```java
 LyricsFetcher.searchParallelDetailed(title, artist, config)
 ```
 
-绀轰緥锛?
+示例：
 
 ```java
 import com.lyricget.LyricResult;
@@ -195,18 +195,18 @@ public final class ModLyricService {
 }
 ```
 
-杩斿洖鍊肩害瀹氾細
+返回值约定：
 
-- `CompletableFuture<LyricResult>` 瀹屾垚涓旂粨鏋滀笉涓?`null`锛氭壘鍒版瓕璇?
-- `CompletableFuture<LyricResult>` 瀹屾垚涓旂粨鏋滀负 `null`锛氭病鏈夊彲鐢ㄧ粨鏋?
-- `LyricResult.lyrics()`锛氭瓕璇嶆枃鏈紝鍙兘鏄?LRC锛屼篃鍙兘鏄櫘閫氭瓕璇?
-- `LyricResult.providerName()`锛氬懡涓殑姝岃瘝婧愬悕绉?
+- `CompletableFuture<LyricResult>` 完成且结果不为 `null`：找到歌词
+- `CompletableFuture<LyricResult>` 完成且结果为 `null`：没有可用结果
+- `LyricResult.lyrics()`：歌词文本，可能是 LRC，也可能是普通歌词
+- `LyricResult.providerName()`：命中的歌词源名称
 
-## 绾跨▼瑕佹眰
+## 线程要求
 
-姝岃瘝鎼滅储浼氳闂綉缁溿€傞泦鎴愬埌 Minecraft mod 鏃讹紝涓嶈鍦ㄥ鎴风涓荤嚎绋嬫垨娓叉煋绾跨▼閲岄樆濉炵瓑寰呫€?
+歌词搜索会访问网络。集成到 Minecraft mod 时，不要在客户端主线程或渲染线程里阻塞等待。
 
-鎺ㄨ崘锛?
+推荐：
 
 ```java
 LyricsFetcher.searchParallelDetailed(title, artist, config)
@@ -218,28 +218,28 @@ LyricsFetcher.searchParallelDetailed(title, artist, config)
             String lyrics = result.lyrics();
             String provider = result.providerName();
 
-            // 鍦ㄨ繖閲屾妸缁撴灉浜ょ粰浣犵殑缂撳瓨銆佺姸鎬佸鍣ㄦ垨 UI 鏇存柊璋冨害鍣ㄣ€?
-            // 濡傛灉闇€瑕佸洖鍒?Minecraft 瀹㈡埛绔嚎绋嬶紝璇蜂娇鐢ㄤ綘鐨?loader/client 鎻愪緵鐨勮皟搴?API銆?
+            // 在这里把结果交给你的缓存、状态容器或 UI 更新调度器。
+            // 如果需要回到 Minecraft 客户端线程，请使用你的 loader/client 提供的调度 API。
         });
 ```
 
-涓嶆帹鑽愶細
+不推荐：
 
 ```java
 LyricResult result = LyricsFetcher.searchParallelDetailed(title, artist, config).join();
 ```
 
-闄ら潪浣犲凡缁忕‘璁よ繖娈典唬鐮佽繍琛屽湪鍚庡彴绾跨▼銆?
+除非你已经确认这段代码运行在后台线程。
 
-## 閰嶇疆椤?
+## 配置项
 
-浣跨敤榛樿閰嶇疆锛?
+使用默认配置：
 
 ```java
 LyricSearchConfig config = LyricSearchConfig.defaults();
 ```
 
-鍙皟鏁村瓧娈碉細
+可调整字段：
 
 ```java
 config.enableNetease = true;
@@ -253,96 +253,96 @@ config.timeoutMs = 4000;
 config.preferChinese = true;
 ```
 
-鑷畾涔夋瓕璇嶆簮锛?
+自定义歌词源：
 
 ```java
 config.enableCustom = true;
 config.customUrl = "https://api.example.com/lyrics?title=%title%&artist=%artist%";
 ```
 
-`%title%` 鍜?`%artist%` 浼氳鏇挎崲涓?URL 缂栫爜鍚庣殑鎼滅储璇嶃€?
+`%title%` 和 `%artist%` 会被替换为 URL 编码后的搜索词。
 
-Musixmatch锛?
+Musixmatch：
 
 ```java
 config.enableMusixmatch = true;
 config.musixmatchApiKey = "your-api-key";
 ```
 
-涓嶈鎶婄鏈?API key 鍐欐鍦ㄥ叕寮€浠撳簱閲屻€?
+不要把私有 API key 写死在公开仓库里。
 
-## 鎼滅储璇嶅缓璁?
+## 搜索词建议
 
-涓婂眰 mod 搴旇灏介噺浼犲叆骞插噣鐨勬瓕鏇蹭俊鎭細
+上层 mod 应该尽量传入干净的歌曲信息：
 
-- `title` 鍙斁姝屽悕锛屼笉瑕佹贩鍏ユ挱鏀惧櫒鐘舵€併€佹枃浠舵墿灞曞悕鎴栨瓕璇嶈
-- `artist` 鍙负绌猴紝浣嗘湁姝屾墜鍚嶆椂鍛戒腑鐜囨洿楂?
-- 鏈湴鏂囦欢鍚嶅缓璁厛鍦ㄤ笂灞?mod 涓竻娲楀悗鍐嶄紶鍏?
+- `title` 只放歌名，不要混入播放器状态、文件扩展名或歌词行
+- `artist` 可为空，但有歌手名时命中率更高
+- 本地文件名建议先在上层 mod 中清洗后再传入
 
-`lyricget` 鍙細鍋氬熀纭€绌虹櫧瀛楃褰掍竴鍖栵紝涓嶈礋璐ｅ鏉傜殑鏇茬洰淇℃伅瑙ｆ瀽銆?
+`lyricget` 只会做基础空白字符归一化，不负责复杂的曲目信息解析。
 
-## 缂撳瓨寤鸿
+## 缓存建议
 
-`lyricget` 涓嶅唴缃紦瀛樸€俶od 闆嗘垚鏃跺缓璁敤涓婂眰缂撳瓨閬垮厤閲嶅璇锋眰銆?
+`lyricget` 不内置缓存。mod 集成时建议用上层缓存避免重复请求。
 
-鎺ㄨ崘缂撳瓨閿細
+推荐缓存键：
 
 ```text
 normalizedTitle + "\n" + normalizedArtist
 ```
 
-寤鸿缂撳瓨鍐呭锛?
+建议缓存内容：
 
-- 姝岃瘝鏂囨湰
-- provider 鍚嶇О
-- 鏌ヨ鏃堕棿
-- 鏄惁涓烘湭鍛戒腑缁撴灉
+- 歌词文本
+- provider 名称
+- 查询时间
+- 是否为未命中结果
 
-鏈懡涓粨鏋滀篃寤鸿鐭椂闂寸紦瀛橈紝閬垮厤鍚屼竴棣栨瓕鍙嶅璇锋眰鎵€鏈夋瓕璇嶆簮銆?
+未命中结果也建议短时间缓存，避免同一首歌反复请求所有歌词源。
 
-## 璁稿彲璇佽姹?
+## 许可证要求
 
-姝ら」鐩娇鐢ㄨ嚜瀹氫箟闄愬埗鎬ц鍙瘉锛屼笉鏄?MIT銆?
+此项目使用自定义限制性许可证，不是 MIT。
 
-闆嗘垚鍒?mod 鎴栨淳鐢熼」鐩椂蹇呴』閬靛畧 `LICENSE`锛屽挨鍏舵槸锛?
+集成到 mod 或派生项目时必须遵守 `LICENSE`，尤其是：
 
-- 涓嶅厑璁镐簩娆″敭鍗栨垨鍖呭惈鍦ㄤ粯璐逛骇鍝併€佷粯璐规湇鍔′腑
-- 鍒嗗彂婧愮爜鎴栨淳鐢熶唬鐮佹椂蹇呴』鍖呭惈 LICENSE 鏂囦欢
-- 浣跨敤姝ら」鐩紑鍙?mod 鏃讹紝蹇呴』鏄庣‘璇存槑姝岃瘝鑾峰彇鏉ユ簮
+- 不允许二次售卖或包含在付费产品、付费服务中
+- 分发源码或派生代码时必须包含 LICENSE 文件
+- 使用此项目开发 mod 时，必须明确说明歌词获取来源
 
-寤鸿鍦ㄤ笂灞?mod 鐨?README 鎴栭福璋㈤〉闈㈠啓鏄庯細
+建议在上层 mod 的 README 或鸣谢页面写明：
 
 ```text
 Lyrics are fetched through lyricget.
 ```
 
-## lyricget 鍐呴儴缁存姢
+## lyricget 内部维护
 
-濡傛灉浣犳槸鍦ㄧ淮鎶?`lyricget` 鏈韩锛岃€屼笉鏄湪鍏朵粬 mod 涓泦鎴愬畠锛?
+如果你是在维护 `lyricget` 本身，而不是在其他 mod 中集成它：
 
-1. 鍦?`src/main/java/com/lyricget/lyrics/` 涓嬫柊澧?`XXXProvider`
-2. 缁ф壙 `AbstractLyricProvider` 鎴栧疄鐜?`LyricProvider`
-3. 鍦?`LyricsFetcher.providers()` 涓敞鍐?
-4. 鎴愬姛鏃惰繑鍥?LRC 鎴栨櫘閫氭瓕璇嶆枃鏈?
-5. 澶辫触銆佹棤缁撴灉鎴栦笉鍙帴鍙楃粨鏋滆繑鍥?`null`
+1. 在 `src/main/java/com/lyricget/lyrics/` 下新增 `XXXProvider`
+2. 继承 `AbstractLyricProvider` 或实现 `LyricProvider`
+3. 在 `LyricsFetcher.providers()` 中注册
+4. 成功时返回 LRC 或普通歌词文本
+5. 失败、无结果或不可接受结果返回 `null`
 
-缁存姢瑙勫垯锛?
+维护规则：
 
-- 涓嶈鎶?Minecraft銆丼MTC銆丠UD 鎴栨挱鏀惧櫒鎺у埗浠ｇ爜鏀捐繘鏉?
-- 涓嶈鍦?provider 涓姞鍏ヤ笂灞?UI 閫昏緫
-- provider 搴斾繚鎸佸彲鐙珛鏇挎崲
-- 鍏叡鍏ュ彛浼樺厛淇濇寔鍚戝悗鍏煎锛岄伩鍏嶇牬鍧忓凡鏈?mod 闆嗘垚
+- 不要把 Minecraft、SMTC、HUD 或播放器控制代码放进来
+- 不要在 provider 中加入上层 UI 逻辑
+- provider 应保持可独立替换
+- 公共入口优先保持向后兼容，避免破坏已有 mod 集成
 
-## 鏋勫缓楠岃瘉
+## 构建验证
 
-鍦?`lyricget` 浠撳簱涓繍琛岋細
+在 `lyricget` 仓库中运行：
 
 ```bash
 ./gradlew.bat build
 ```
 
-鍛戒护琛岃皟璇曪細
+命令行调试：
 
 ```bash
-./gradlew.bat run --args="鏅村ぉ 鍛ㄦ澃浼?
+./gradlew.bat run --args="晴天 周杰伦"
 ```
